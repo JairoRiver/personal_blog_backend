@@ -18,11 +18,11 @@ func New() *Server {
 		})
 	})
 
-	server := &Server{
+	server := Server{
 		router: router,
 	}
 
-	return server
+	return &server
 }
 
 func (server *Server) Start(address string) error {
