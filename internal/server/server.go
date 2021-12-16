@@ -2,7 +2,6 @@ package server
 
 import (
 	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
 type Server struct {
@@ -10,19 +9,20 @@ type Server struct {
 }
 
 func New() *Server {
-	router := gin.Default()
+	var server Server
 
-	router.GET("/", func(ctx *gin.Context) {
-		ctx.JSON(http.StatusOK, gin.H{
-			"message": "Hola Mundo",
-		})
-	})
-
-	server := Server{
-		router: router,
-	}
+	server.setupRouter()
 
 	return &server
+}
+
+func (server *Server) setupRouter() {
+	router := gin.Default()
+
+	//db routes
+	router.GET("/v1/role", server.listRole)
+
+	server.router = router
 }
 
 func (server *Server) Start(address string) error {
