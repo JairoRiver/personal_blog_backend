@@ -11,9 +11,7 @@ WHERE id = $1 LIMIT 1;
 
 -- name: ListRoles :many
 SELECT * FROM roles
-ORDER BY created_at
-LIMIT $1
-    OFFSET $2;
+ORDER BY created_at;
 
 -- name: UpdateRole :one
 UPDATE roles

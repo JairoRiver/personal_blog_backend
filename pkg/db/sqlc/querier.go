@@ -9,11 +9,22 @@ import (
 )
 
 type Querier interface {
+	CreatePost(ctx context.Context, arg CreatePostParams) (Post, error)
 	CreateRole(ctx context.Context, name string) (Role, error)
+	CreateUser(ctx context.Context, arg CreateUserParams) (User, error)
+	DeletePost(ctx context.Context, id uuid.UUID) error
 	DeleteRole(ctx context.Context, id uuid.UUID) error
+	DeleteUser(ctx context.Context, id uuid.UUID) error
+	GetPost(ctx context.Context, id uuid.UUID) (Post, error)
 	GetRole(ctx context.Context, id uuid.UUID) (Role, error)
-	ListRoles(ctx context.Context, arg ListRolesParams) ([]Role, error)
+	GetUser(ctx context.Context, id uuid.UUID) (User, error)
+	GetUserByUsername(ctx context.Context, username string) (User, error)
+	ListPosts(ctx context.Context, arg ListPostsParams) ([]Post, error)
+	ListRoles(ctx context.Context) ([]Role, error)
+	ListUsers(ctx context.Context, arg ListUsersParams) ([]User, error)
+	UpdatePost(ctx context.Context, arg UpdatePostParams) (Post, error)
 	UpdateRole(ctx context.Context, arg UpdateRoleParams) (Role, error)
+	UpdateUser(ctx context.Context, arg UpdateUserParams) (User, error)
 }
 
 var _ Querier = (*Queries)(nil)
