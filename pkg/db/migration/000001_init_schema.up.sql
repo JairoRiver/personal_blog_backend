@@ -1,7 +1,7 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 CREATE TABLE "users" (
-                         "id" uuid PRIMARY KEY,
+                         "id" uuid PRIMARY KEY DEFAULT (uuid_generate_v4()),
                          "role_id" uuid NOT NULL,
                          "username" varchar UNIQUE NOT NULL,
                          "email" varchar UNIQUE NOT NULL,
@@ -11,14 +11,14 @@ CREATE TABLE "users" (
 );
 
 CREATE TABLE "roles" (
-                         "id" uuid PRIMARY KEY,
+                         "id" uuid PRIMARY KEY DEFAULT (uuid_generate_v4()),
                          "name" varchar NOT NULL,
                          "created_at" timestamptz NOT NULL DEFAULT (now()),
                          "updated_at" timestamptz NOT NULL DEFAULT (now())
 );
 
 CREATE TABLE "posts" (
-                         "id" uuid PRIMARY KEY,
+                         "id" uuid PRIMARY KEY DEFAULT (uuid_generate_v4()),
                          "user_id" uuid NOT NULL,
                          "title" varchar NOT NULL,
                          "subtitle" varchar NOT NULL,

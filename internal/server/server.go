@@ -23,15 +23,10 @@ func New(config util.Config, store *db.Queries) *Server {
 	return &server
 }
 
-func (server *Server) setupRouter() {
-	router := gin.Default()
-
-	//db routes
-	router.GET("/v1/role", server.listRole)
-
-	server.router = router
-}
-
 func (server *Server) Start(address string) error {
 	return server.router.Run(address)
+}
+
+func errorResponse(err error) gin.H {
+	return gin.H{"error": err.Error()}
 }

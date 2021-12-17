@@ -1,13 +1,13 @@
 ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
 postgres:
-	docker run --name postgres14 -p 5432:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=secret -d postgres:14-alpine
+	docker run --name postgres13 -p 5432:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=secret -d postgres:13-alpine
 
 createdb:
-	docker exec -it postgres14 createdb --username=root --owner=root my_blog
+	docker exec -it postgres13 createdb --username=root --owner=root my_blog
 
 dropdb:
-	docker exec -it postgres14 dropdb my_blog
+	docker exec -it postgres13 dropdb my_blog
 
 migrateup:
 	docker run --rm -v "$(ROOT_DIR)/pkg/db/migration":/migrations --network host migrate/migrate -path=/migrations/ -database "postgresql://root:secret@localhost:5432/my_blog?sslmode=disable" -verbose up
