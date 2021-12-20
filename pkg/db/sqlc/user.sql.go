@@ -5,6 +5,7 @@ package db
 
 import (
 	"context"
+	"time"
 
 	"github.com/google/uuid"
 )
@@ -101,7 +102,13 @@ func (q *Queries) GetUserByUsername(ctx context.Context, username string) (User,
 }
 
 const listUsers = `-- name: ListUsers :many
-SELECT id, role_id, username, email, password, created_at, updated_at FROM users
+SELECT id
+      ,username
+      ,email
+      ,role_id
+      ,created_at
+      ,updated_at
+FROM users
 ORDER BY created_at
 LIMIT $1
     OFFSET $2
@@ -112,21 +119,29 @@ type ListUsersParams struct {
 	Offset int32 `json:"offset"`
 }
 
-func (q *Queries) ListUsers(ctx context.Context, arg ListUsersParams) ([]User, error) {
+type ListUsersRow struct {
+	ID        uuid.UUID `json:"id"`
+	Username  string    `json:"username"`
+	Email     string    `json:"email"`
+	RoleID    uuid.UUID `json:"role_id"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+}
+
+func (q *Queries) ListUsers(ctx context.Context, arg ListUsersParams) ([]ListUsersRow, error) {
 	rows, err := q.db.QueryContext(ctx, listUsers, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	items := []User{}
+	items := []ListUsersRow{}
 	for rows.Next() {
-		var i User
+		var i ListUsersRow
 		if err := rows.Scan(
 			&i.ID,
-			&i.RoleID,
 			&i.Username,
 			&i.Email,
-			&i.Password,
+			&i.RoleID,
 			&i.CreatedAt,
 			&i.UpdatedAt,
 		); err != nil {
@@ -148,10 +163,13 @@ UPDATE users
 SET username = $2
   ,role_id = $3
   ,email = $4
-  ,password = $5
   ,updated_at = NOW()
 WHERE id = $1
-RETURNING id, role_id, username, email, password, created_at, updated_at
+RETURNING id
+         ,username
+         ,email
+         ,role_id
+         ,updated_at
 `
 
 type UpdateUserParams struct {
@@ -159,25 +177,29 @@ type UpdateUserParams struct {
 	Username string    `json:"username"`
 	RoleID   uuid.UUID `json:"role_id"`
 	Email    string    `json:"email"`
-	Password string    `json:"password"`
 }
 
-func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) (User, error) {
+type UpdateUserRow struct {
+	ID        uuid.UUID `json:"id"`
+	Username  string    `json:"username"`
+	Email     string    `json:"email"`
+	RoleID    uuid.UUID `json:"role_id"`
+	UpdatedAt time.Time `json:"updated_at"`
+}
+
+func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) (UpdateUserRow, error) {
 	row := q.db.QueryRowContext(ctx, updateUser,
 		arg.ID,
 		arg.Username,
 		arg.RoleID,
 		arg.Email,
-		arg.Password,
 	)
-	var i User
+	var i UpdateUserRow
 	err := row.Scan(
 		&i.ID,
-		&i.RoleID,
 		&i.Username,
 		&i.Email,
-		&i.Password,
-		&i.CreatedAt,
+		&i.RoleID,
 		&i.UpdatedAt,
 	)
 	return i, err

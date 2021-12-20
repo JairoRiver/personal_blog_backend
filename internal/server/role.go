@@ -2,6 +2,7 @@ package server
 
 import (
 	"database/sql"
+	"github.com/JairoRiver/personal_blog_backend/internal/util"
 	db "github.com/JairoRiver/personal_blog_backend/pkg/db/sqlc"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -76,36 +77,46 @@ func (server *Server) listRoles(ctx *gin.Context) {
 
 //update role
 type updateRoleRequest struct {
-	Name string `json:"name"`
-	ID   string `json:"id" uri:"id" binding:"uuid"`
+	Name string `json:"name" binding:"omitempty"`
+	ID   string `json:"id" uri:"id" binding:"required,uuid"`
 }
 
 func (server *Server) updateRole(ctx *gin.Context) {
 	var req updateRoleRequest
-	if err := ctx.BindUri(&req); err != nil {
+	if err := ctx.ShouldBindUri(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
 
-	if err := ctx.Bind(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, errorResponse(err))
-		return
-	}
-
+	//get one role
 	roleId, _ := uuid.Parse(req.ID)
+	role, err := server.store.GetRole(ctx, roleId)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			ctx.JSON(http.StatusNotFound, errorResponse(err))
+			return
+		}
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return
+	}
+
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+		return
+	}
 
 	arg := db.UpdateRoleParams{
 		ID:   roleId,
-		Name: req.Name,
+		Name: util.FilterEmptyString(req.Name, role.Name),
 	}
 
-	role, err := server.store.UpdateRole(ctx, arg)
+	roleUpdated, err := server.store.UpdateRole(ctx, arg)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
 
-	ctx.JSON(http.StatusOK, role)
+	ctx.JSON(http.StatusOK, roleUpdated)
 }
 
 //delete role

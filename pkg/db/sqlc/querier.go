@@ -21,10 +21,10 @@ type Querier interface {
 	GetUserByUsername(ctx context.Context, username string) (User, error)
 	ListPosts(ctx context.Context, arg ListPostsParams) ([]Post, error)
 	ListRoles(ctx context.Context) ([]Role, error)
-	ListUsers(ctx context.Context, arg ListUsersParams) ([]User, error)
+	ListUsers(ctx context.Context, arg ListUsersParams) ([]ListUsersRow, error)
 	UpdatePost(ctx context.Context, arg UpdatePostParams) (Post, error)
 	UpdateRole(ctx context.Context, arg UpdateRoleParams) (Role, error)
-	UpdateUser(ctx context.Context, arg UpdateUserParams) (User, error)
+	UpdateUser(ctx context.Context, arg UpdateUserParams) (UpdateUserRow, error)
 }
 
 var _ Querier = (*Queries)(nil)
