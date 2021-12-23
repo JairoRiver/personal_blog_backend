@@ -19,5 +19,12 @@ func (server *Server) setupRouter() {
 	router.PUT("/v1/user/:id", server.updateUser)
 	router.DELETE("/v1/user/:id", server.deleteUser)
 
+	//post routes
+	router.POST("/v1/post", server.createPost)
+	router.GET("/v1/post/:id", server.getPost)
+	router.GET("/v1/posts", server.listPosts)
+	router.PUT("/v1/post/:id", server.updatePost)
+	router.DELETE("/v1/post/:id", server.deletePost)
+
 	server.router = router
 }

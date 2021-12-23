@@ -5,6 +5,7 @@ package db
 
 import (
 	"context"
+	"time"
 
 	"github.com/google/uuid"
 )
@@ -81,7 +82,13 @@ func (q *Queries) GetPost(ctx context.Context, id uuid.UUID) (Post, error) {
 }
 
 const listPosts = `-- name: ListPosts :many
-SELECT id, user_id, title, subtitle, content, created_at, updated_at FROM posts
+SELECT id
+      ,Title
+      ,Subtitle
+      ,Content
+      ,Created_at
+      ,Updated_at
+FROM posts
 ORDER BY created_at
 LIMIT $1
     OFFSET $2
@@ -92,18 +99,26 @@ type ListPostsParams struct {
 	Offset int32 `json:"offset"`
 }
 
-func (q *Queries) ListPosts(ctx context.Context, arg ListPostsParams) ([]Post, error) {
+type ListPostsRow struct {
+	ID        uuid.UUID `json:"id"`
+	Title     string    `json:"title"`
+	Subtitle  string    `json:"subtitle"`
+	Content   string    `json:"content"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+}
+
+func (q *Queries) ListPosts(ctx context.Context, arg ListPostsParams) ([]ListPostsRow, error) {
 	rows, err := q.db.QueryContext(ctx, listPosts, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	items := []Post{}
+	items := []ListPostsRow{}
 	for rows.Next() {
-		var i Post
+		var i ListPostsRow
 		if err := rows.Scan(
 			&i.ID,
-			&i.UserID,
 			&i.Title,
 			&i.Subtitle,
 			&i.Content,
@@ -130,7 +145,10 @@ SET title = $2
   ,content = $4
   ,updated_at = NOW()
 WHERE id = $1
-RETURNING id, user_id, title, subtitle, content, created_at, updated_at
+RETURNING title
+         ,subtitle
+         ,content
+         ,updated_at
 `
 
 type UpdatePostParams struct {
@@ -140,21 +158,25 @@ type UpdatePostParams struct {
 	Content  string    `json:"content"`
 }
 
-func (q *Queries) UpdatePost(ctx context.Context, arg UpdatePostParams) (Post, error) {
+type UpdatePostRow struct {
+	Title     string    `json:"title"`
+	Subtitle  string    `json:"subtitle"`
+	Content   string    `json:"content"`
+	UpdatedAt time.Time `json:"updated_at"`
+}
+
+func (q *Queries) UpdatePost(ctx context.Context, arg UpdatePostParams) (UpdatePostRow, error) {
 	row := q.db.QueryRowContext(ctx, updatePost,
 		arg.ID,
 		arg.Title,
 		arg.Subtitle,
 		arg.Content,
 	)
-	var i Post
+	var i UpdatePostRow
 	err := row.Scan(
-		&i.ID,
-		&i.UserID,
 		&i.Title,
 		&i.Subtitle,
 		&i.Content,
-		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
 	return i, err
