@@ -1,0 +1,50 @@
+version: '3'
+
+env:
+  DB_URL: 'postgresql://root:secret@localhost:5432/my_blog?sslmode=disable'
+
+tasks:
+  postgres:
+    desc: Build a postgrest 14 container
+    cmds:
+    - docker run --name postgres_blog -p 5432:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=secret -d postgres:14-alpine
+
+  createdb:
+    desc: Create db my_blog on a postgres instance
+    cmds:
+    - docker exec -it postgres_blog createdb --username=root --owner=root my_blog
+
+  dropdb:
+    desc: Drop my_blog db on a postgres instance
+    cmds:
+    - docker exec -it postgres_blog dropdb my_blog
+
+  migrateup:
+    desc: Run the migrations up
+    cmds:
+    - migrate -path internal/db/migration -database $DB_URL -verbose up
+
+  migratedown:
+    desc: Run the migrations down
+    cmds:
+    - migrate -path internal/db/migration -database $DB_URL -verbose down
+
+  sqlc:
+    desc: generate sqlc code
+    cmds:
+    - sqlc generate
+
+  seed:
+    desc: seed create the defauld roles and users whos need the app
+    cmds:
+    - go run cmd/seed/main.go
+
+  test:
+    desc: run the test
+    cmds:
+    - go test -v -cover ./...
+  
+  server:
+    desc: init the server
+    cmds:
+    - go run cmd/api/main.go
