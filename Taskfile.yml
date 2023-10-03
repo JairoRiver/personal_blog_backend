@@ -48,3 +48,13 @@ tasks:
     desc: init the server
     cmds:
     - go run cmd/api/main.go
+  
+  swagger:
+    desc: create swagger documentation
+    cmds:
+    - swag init -g internal/api/routes.go
+  
+  swag-format:
+    desc: format the swagger anotation
+    cmds:
+    - swag fmt
