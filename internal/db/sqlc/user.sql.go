@@ -79,6 +79,28 @@ func (q *Queries) GetUser(ctx context.Context, id uuid.UUID) (User, error) {
 	return i, err
 }
 
+const getUserByUsername = `-- name: GetUserByUsername :one
+SELECT u.id
+      ,u.username
+      ,u.password
+FROM users as u
+WHERE u.username = $1 
+LIMIT 1
+`
+
+type GetUserByUsernameRow struct {
+	ID       uuid.UUID `json:"id"`
+	Username string    `json:"username"`
+	Password string    `json:"password"`
+}
+
+func (q *Queries) GetUserByUsername(ctx context.Context, username string) (GetUserByUsernameRow, error) {
+	row := q.db.QueryRow(ctx, getUserByUsername, username)
+	var i GetUserByUsernameRow
+	err := row.Scan(&i.ID, &i.Username, &i.Password)
+	return i, err
+}
+
 const listUsers = `-- name: ListUsers :many
 SELECT u.id
       ,u.username

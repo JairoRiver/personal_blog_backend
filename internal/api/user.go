@@ -93,6 +93,17 @@ func getUserResponse(user db.User) userResponse {
 	}
 }
 
+// getUser godoc
+//
+//	@Summary		Get a User
+//	@Description	Recive the one user information from a id
+//	@Tags			user,get
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{object}	db.User
+//
+//	@Param			id	path		string	true	"id"
+//	@Router			/user/{id} [get]
 func (server *Server) getUser(ctx *gin.Context) {
 	var req getUserRequest
 	if err := ctx.ShouldBindUri(&req); err != nil {
@@ -123,6 +134,16 @@ func (server *Server) getUser(ctx *gin.Context) {
 }
 
 // list user handler
+
+// listUsers godoc
+//
+//	@Summary		List Users
+//	@Description	Recive all users
+//	@Tags			user,list
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{object}	db.ListUsersRow
+//	@Router			/users [get]
 func (server *Server) listUsers(ctx *gin.Context) {
 	users, err := server.store.ListUsers(ctx)
 	if err != nil {
@@ -143,6 +164,17 @@ type updateUserRequestID struct {
 	ID string `uri:"id" binding:"required,uuid"`
 }
 
+// updateUser godoc
+//
+//	@Summary		Update User
+//	@Description	Update the user information
+//	@Tags			user,update
+//	@Accept			json
+//	@Produce		json
+//	@Param			id		path		string					true	"id"
+//	@Param			user	body		updateUserRequestData	true	"User Data"
+//	@Success		200		{object}	userResponse
+//	@Router			/user/{id} [put]
 func (server *Server) updateUser(ctx *gin.Context) {
 	var userIDReq updateUserRequestID
 	if err := ctx.ShouldBindUri(&userIDReq); err != nil {
@@ -208,10 +240,21 @@ func (server *Server) updateUser(ctx *gin.Context) {
 }
 
 // delete User handler
+
 type deleteUserRequest struct {
 	ID string `uri:"id" binding:"required,uuid"`
 }
 
+// deleteUser godoc
+//
+//	@Summary		Delete User
+//	@Description	Delete the user register
+//	@Tags			user,delete
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		string	true	"id"
+//	@Success		200	{object}	uuid.UUID
+//	@Router			/user/{id} [delete]
 func (server *Server) deleteUser(ctx *gin.Context) {
 	var req deleteUserRequest
 	if err := ctx.ShouldBindUri(&req); err != nil {

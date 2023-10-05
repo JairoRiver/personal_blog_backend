@@ -18,6 +18,14 @@ FROM users as u
 WHERE u.id = $1 
 LIMIT 1;
 
+-- name: GetUserByUsername :one
+SELECT u.id
+      ,u.username
+      ,u.password
+FROM users as u
+WHERE u.username = $1 
+LIMIT 1;
+
 -- name: ListUsers :many
 SELECT u.id
       ,u.username
