@@ -17,20 +17,22 @@ func (server *Server) setupRouter() {
 	docs.SwaggerInfo.BasePath = "/v1"
 	//	@securityDefinitions.apiKey	JWT
 	//	@in							header
-	//	@name						token
+	//	@name						authorization
 	docs.SwaggerInfo.Schemes = []string{"http", "https"}
 
 	router := gin.Default()
 
 	//autRoutes := router.Group("/")
 	apiRoutes := router.Group(docs.SwaggerInfo.BasePath)
+	authRoutes := apiRoutes.Group("").Use(authMiddleware(server.tokenMaker))
 
 	// User routes
-	apiRoutes.POST("/user", server.createUser)
-	apiRoutes.GET("/user/:id", server.getUser)
-	apiRoutes.GET("/users", server.listUsers)
-	apiRoutes.PUT("/user/:id", server.updateUser)
-	apiRoutes.DELETE("/user/:id", server.deleteUser)
+	authRoutes.POST("/user", server.createUser)
+	authRoutes.GET("/user/:id", server.getUser)
+	authRoutes.GET("/users", server.listUsers)
+	authRoutes.PUT("/user/:id", server.updateUser)
+	authRoutes.DELETE("/user/:id", server.deleteUser)
+	apiRoutes.POST("login", server.loginUser)
 
 	// swagger
 	url := ginSwagger.URL("http://localhost:8080/swagger/doc.json")

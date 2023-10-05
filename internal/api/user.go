@@ -37,15 +37,19 @@ func newUserResponse(user db.User) userResponse {
 
 // createUser godoc
 //
-//	@Summary		Create a new User
-//	@Description	Create a new user
-//	@Tags			user,create
-//	@Accept			json
-//	@Produce		json
-//	@Success		200		{object}	userResponse
+//	@Summary					Create a new User
+//	@Description				Create a new user
+//	@Tags						user,create
+//	@Accept						json
+//	@Produce					json
+//	@Success					200		{object}	userResponse
 //
-//	@Param			user	body		createUserRequest	true	"User Data"
-//	@Router			/user [post]
+//	@Param						user	body		createUserRequest	true	"User Data"
+//	@securityDefinitions.apiKey	token
+//	@in							header
+//	@name						Authorization
+//	@Security					JWT
+//	@Router						/user [post]
 func (server *Server) createUser(ctx *gin.Context) {
 	var req createUserRequest
 	if err := ctx.ShouldBindJSON(&req); err != nil {
@@ -95,15 +99,21 @@ func getUserResponse(user db.User) userResponse {
 
 // getUser godoc
 //
-//	@Summary		Get a User
-//	@Description	Recive the one user information from a id
-//	@Tags			user,get
-//	@Accept			json
-//	@Produce		json
-//	@Success		200	{object}	db.User
+//	@Summary					Get a User
+//	@Description				Recive the one user information from a id
+//	@Tags						user,get
+//	@Accept						json
+//	@Produce					json
+//	@Success					200	{object}	db.User
 //
-//	@Param			id	path		string	true	"id"
-//	@Router			/user/{id} [get]
+//	@Param						id	path		string	true	"id"
+//
+//	@securityDefinitions.apiKey	token
+//	@in							header
+//	@name						Authorization
+//	@Security					JWT
+//
+//	@Router						/user/{id} [get]
 func (server *Server) getUser(ctx *gin.Context) {
 	var req getUserRequest
 	if err := ctx.ShouldBindUri(&req); err != nil {
@@ -137,13 +147,17 @@ func (server *Server) getUser(ctx *gin.Context) {
 
 // listUsers godoc
 //
-//	@Summary		List Users
-//	@Description	Recive all users
-//	@Tags			user,list
-//	@Accept			json
-//	@Produce		json
-//	@Success		200	{object}	db.ListUsersRow
-//	@Router			/users [get]
+//	@Summary					List Users
+//	@Description				Recive all users
+//	@Tags						user,list
+//	@Accept						json
+//	@Produce					json
+//	@Success					200	{object}	db.ListUsersRow
+//	@securityDefinitions.apiKey	token
+//	@in							header
+//	@name						Authorization
+//	@Security					JWT
+//	@Router						/users [get]
 func (server *Server) listUsers(ctx *gin.Context) {
 	users, err := server.store.ListUsers(ctx)
 	if err != nil {
@@ -166,15 +180,19 @@ type updateUserRequestID struct {
 
 // updateUser godoc
 //
-//	@Summary		Update User
-//	@Description	Update the user information
-//	@Tags			user,update
-//	@Accept			json
-//	@Produce		json
-//	@Param			id		path		string					true	"id"
-//	@Param			user	body		updateUserRequestData	true	"User Data"
-//	@Success		200		{object}	userResponse
-//	@Router			/user/{id} [put]
+//	@Summary					Update User
+//	@Description				Update the user information
+//	@Tags						user,update
+//	@Accept						json
+//	@Produce					json
+//	@Param						id		path		string					true	"id"
+//	@Param						user	body		updateUserRequestData	true	"User Data"
+//	@Success					200		{object}	userResponse
+//	@securityDefinitions.apiKey	token
+//	@in							header
+//	@name						Authorization
+//	@Security					JWT
+//	@Router						/user/{id} [put]
 func (server *Server) updateUser(ctx *gin.Context) {
 	var userIDReq updateUserRequestID
 	if err := ctx.ShouldBindUri(&userIDReq); err != nil {
@@ -247,14 +265,18 @@ type deleteUserRequest struct {
 
 // deleteUser godoc
 //
-//	@Summary		Delete User
-//	@Description	Delete the user register
-//	@Tags			user,delete
-//	@Accept			json
-//	@Produce		json
-//	@Param			id	path		string	true	"id"
-//	@Success		200	{object}	uuid.UUID
-//	@Router			/user/{id} [delete]
+//	@Summary					Delete User
+//	@Description				Delete the user register
+//	@Tags						user,delete
+//	@Accept						json
+//	@Produce					json
+//	@Param						id	path		string	true	"id"
+//	@Success					200	{object}	uuid.UUID
+//	@securityDefinitions.apiKey	token
+//	@in							header
+//	@name						Authorization
+//	@Security					JWT
+//	@Router						/user/{id} [delete]
 func (server *Server) deleteUser(ctx *gin.Context) {
 	var req deleteUserRequest
 	if err := ctx.ShouldBindUri(&req); err != nil {

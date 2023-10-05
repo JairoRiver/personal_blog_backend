@@ -12,6 +12,34 @@ definitions:
     - password
     - username
     type: object
+  api.loginUserRequest:
+    properties:
+      password:
+        minLength: 6
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  api.loginUserResponse:
+    properties:
+      access_token:
+        type: string
+      access_token_expires_at:
+        type: string
+      refresh_token:
+        type: string
+      refresh_token_expires_at:
+        type: string
+      session_id:
+        type: string
+      user:
+        type: string
+      user_id:
+        type: string
+    type: object
   api.updateUserRequestData:
     properties:
       email:
@@ -61,6 +89,29 @@ definitions:
 info:
   contact: {}
 paths:
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Login a user and return access token a refresh token
+      parameters:
+      - description: User Login
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/api.loginUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.loginUserResponse'
+      summary: Login User
+      tags:
+      - user
+      - login
   /user:
     post:
       consumes:
@@ -80,6 +131,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/api.userResponse'
+      security:
+      - JWT: []
       summary: Create a new User
       tags:
       - user
@@ -102,6 +155,8 @@ paths:
           description: OK
           schema:
             type: string
+      security:
+      - JWT: []
       summary: Delete User
       tags:
       - user
@@ -123,6 +178,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/db.User'
+      security:
+      - JWT: []
       summary: Get a User
       tags:
       - user
@@ -150,6 +207,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/api.userResponse'
+      security:
+      - JWT: []
       summary: Update User
       tags:
       - user
@@ -166,6 +225,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/db.ListUsersRow'
+      security:
+      - JWT: []
       summary: List Users
       tags:
       - user
@@ -173,6 +234,6 @@ paths:
 securityDefinitions:
   JWT:
     in: header
-    name: token
+    name: authorization
     type: apiKey
 swagger: "2.0"
