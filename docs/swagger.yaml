@@ -1,4 +1,11 @@
 definitions:
+  api.createCategoryRequest:
+    properties:
+      name:
+        type: string
+    required:
+    - name
+    type: object
   api.createUserRequest:
     properties:
       email:
@@ -40,6 +47,11 @@ definitions:
       user_id:
         type: string
     type: object
+  api.updateCategoryRequestData:
+    properties:
+      name:
+        type: string
+    type: object
   api.updateUserRequestData:
     properties:
       email:
@@ -58,6 +70,17 @@ definitions:
       id:
         type: string
       username:
+        type: string
+    type: object
+  db.Category:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      updated_at:
         type: string
     type: object
   db.ListUsersRow:
@@ -89,6 +112,125 @@ definitions:
 info:
   contact: {}
 paths:
+  /categories:
+    get:
+      consumes:
+      - application/json
+      description: Recive all categories
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/db.Category'
+      security:
+      - JWT: []
+      summary: List Categories
+      tags:
+      - category
+      - list
+  /category:
+    post:
+      consumes:
+      - application/json
+      description: Create a new Category
+      parameters:
+      - description: Category Data
+        in: body
+        name: category
+        required: true
+        schema:
+          $ref: '#/definitions/api.createCategoryRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/db.Category'
+      security:
+      - JWT: []
+      summary: Create a new Category
+      tags:
+      - category
+      - create
+  /category/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete the category register
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      security:
+      - JWT: []
+      summary: Delete Category
+      tags:
+      - category
+      - delete
+    get:
+      consumes:
+      - application/json
+      description: Recive the one category information from a id
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/db.Category'
+      security:
+      - JWT: []
+      summary: Get a Category
+      tags:
+      - category
+      - get
+    put:
+      consumes:
+      - application/json
+      description: Update the category information
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Category Data
+        in: body
+        name: category
+        required: true
+        schema:
+          $ref: '#/definitions/api.updateCategoryRequestData'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/db.Category'
+      security:
+      - JWT: []
+      summary: Update Category
+      tags:
+      - category
+      - update
   /login:
     post:
       consumes:

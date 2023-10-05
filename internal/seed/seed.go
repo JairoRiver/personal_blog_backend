@@ -25,7 +25,7 @@ func New(config util.Config, store *db.Queries) (*Initial, error) {
 
 func (initial *Initial) Run() error {
 	//create users admin
-	adminUser := createInitialUser(initial, "jairo-admin")
+	adminUser := createInitialUser(initial, "jairoAdmin")
 	fmt.Println("user creared", adminUser.Username)
 
 	return nil

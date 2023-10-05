@@ -11,13 +11,18 @@ import (
 )
 
 type Querier interface {
+	CreateCategory(ctx context.Context, name string) (Category, error)
 	CreateSession(ctx context.Context, arg CreateSessionParams) (Session, error)
 	CreateUser(ctx context.Context, arg CreateUserParams) (User, error)
+	DeleteCategory(ctx context.Context, id uuid.UUID) error
 	DeleteUser(ctx context.Context, id uuid.UUID) error
+	GetCategory(ctx context.Context, id uuid.UUID) (Category, error)
 	GetSession(ctx context.Context, id uuid.UUID) (Session, error)
 	GetUser(ctx context.Context, id uuid.UUID) (User, error)
 	GetUserByUsername(ctx context.Context, username string) (GetUserByUsernameRow, error)
+	ListCategories(ctx context.Context) ([]Category, error)
 	ListUsers(ctx context.Context) ([]ListUsersRow, error)
+	UpdateCategory(ctx context.Context, arg UpdateCategoryParams) (Category, error)
 	UpdateUser(ctx context.Context, arg UpdateUserParams) (User, error)
 }
 
