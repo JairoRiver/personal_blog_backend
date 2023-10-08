@@ -56,21 +56,15 @@ type getCategoryRequest struct {
 
 // getCategory godoc
 //
-//	@Summary					Get a Category
-//	@Description				Recive the one category information from a id
-//	@Tags						category,get
-//	@Accept						json
-//	@Produce					json
-//	@Success					200	{object}	db.Category
+//	@Summary		Get a Category
+//	@Description	Recive the one category information from a id
+//	@Tags			category,get
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{object}	db.Category
 //
-//	@Param						id	path		string	true	"id"
-//
-//	@securityDefinitions.apiKey	token
-//	@in							header
-//	@name						Authorization
-//	@Security					JWT
-//
-//	@Router						/category/{id} [get]
+//	@Param			id	path		string	true	"id"
+//	@Router			/category/{id} [get]
 func (server *Server) getCategory(ctx *gin.Context) {
 	var req getCategoryRequest
 
@@ -103,17 +97,13 @@ func (server *Server) getCategory(ctx *gin.Context) {
 //
 // listCategories godoc
 //
-//	@Summary					List Categories
-//	@Description				Recive all categories
-//	@Tags						category,list
-//	@Accept						json
-//	@Produce					json
-//	@Success					200	{object}	db.Category
-//	@securityDefinitions.apiKey	token
-//	@in							header
-//	@name						Authorization
-//	@Security					JWT
-//	@Router						/categories [get]
+//	@Summary		List Categories
+//	@Description	Recive all categories
+//	@Tags			category,list
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{object}	db.Category
+//	@Router			/categories [get]
 func (server *Server) listCategories(ctx *gin.Context) {
 	categories, err := server.store.ListCategories(ctx)
 	if err != nil {

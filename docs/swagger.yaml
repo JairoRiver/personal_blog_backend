@@ -94,6 +94,19 @@ definitions:
       username:
         type: string
     type: object
+  db.Tag:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: string
+      image_url:
+        type: string
+      name:
+        type: string
+      updated_at:
+        type: string
+    type: object
   db.User:
     properties:
       created_at:
@@ -124,8 +137,6 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/db.Category'
-      security:
-      - JWT: []
       summary: List Categories
       tags:
       - category
@@ -196,8 +207,6 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/db.Category'
-      security:
-      - JWT: []
       summary: Get a Category
       tags:
       - category
@@ -254,6 +263,96 @@ paths:
       tags:
       - user
       - login
+  /tag:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Create a new Tag, the image are upload to S3 services
+      parameters:
+      - description: This is the tag name
+        in: formData
+        name: name
+        required: true
+        type: string
+      - description: This is a image
+        in: formData
+        name: logo
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/db.Tag'
+      security:
+      - JWT: []
+      summary: Create a new Tag
+      tags:
+      - tag
+      - create
+  /tag/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete the tag register
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      security:
+      - JWT: []
+      summary: Delete Tag
+      tags:
+      - tag
+      - delete
+    get:
+      consumes:
+      - application/json
+      description: Recive the one tag information from a id
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/db.Tag'
+      summary: Get a Tag
+      tags:
+      - tag
+      - get
+  /tags:
+    get:
+      consumes:
+      - application/json
+      description: Recive all tags
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/db.Tag'
+      summary: List Tags
+      tags:
+      - tag
+      - list
   /user:
     post:
       consumes:

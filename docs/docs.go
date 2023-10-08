@@ -17,11 +17,6 @@ const docTemplate = `{
     "paths": {
         "/categories": {
             "get": {
-                "security": [
-                    {
-                        "JWT": []
-                    }
-                ],
                 "description": "Recive all categories",
                 "consumes": [
                     "application/json"
@@ -86,11 +81,6 @@ const docTemplate = `{
         },
         "/category/{id}": {
             "get": {
-                "security": [
-                    {
-                        "JWT": []
-                    }
-                ],
                 "description": "Recive the one category information from a id",
                 "consumes": [
                     "application/json"
@@ -233,6 +223,144 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/api.loginUserResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/tag": {
+            "post": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "Create a new Tag, the image are upload to S3 services",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "tag",
+                    "create"
+                ],
+                "summary": "Create a new Tag",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "This is the tag name",
+                        "name": "name",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "This is a image",
+                        "name": "logo",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/db.Tag"
+                        }
+                    }
+                }
+            }
+        },
+        "/tag/{id}": {
+            "get": {
+                "description": "Recive the one tag information from a id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "tag",
+                    "get"
+                ],
+                "summary": "Get a Tag",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/db.Tag"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "Delete the tag register",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "tag",
+                    "delete"
+                ],
+                "summary": "Delete Tag",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/tags": {
+            "get": {
+                "description": "Recive all tags",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "tag",
+                    "list"
+                ],
+                "summary": "List Tags",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/db.Tag"
                         }
                     }
                 }
@@ -569,6 +697,26 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "db.Tag": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "image_url": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "updated_at": {
                     "type": "string"
                 }
             }

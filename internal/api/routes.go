@@ -30,6 +30,8 @@ func (server *Server) setupRouter() {
 
 	router := gin.Default()
 
+	router.MaxMultipartMemory = 8 << 20 // 8 MiB
+
 	//autRoutes := router.Group("/")
 	apiRoutes := router.Group(docs.SwaggerInfo.BasePath)
 	authRoutes := apiRoutes.Group("").Use(authMiddleware(server.tokenMaker))
@@ -44,10 +46,16 @@ func (server *Server) setupRouter() {
 
 	// Categories routes
 	authRoutes.POST("/category", server.createCategory)
-	authRoutes.GET("/category/:id", server.getCategory)
-	authRoutes.GET("/categories", server.listCategories)
+	apiRoutes.GET("/category/:id", server.getCategory)
+	apiRoutes.GET("/categories", server.listCategories)
 	authRoutes.PUT("/category/:id", server.updateCategory)
 	authRoutes.DELETE("/category/:id", server.deleteCategory)
+
+	// Tags routes
+	authRoutes.POST("/tag", server.createTag)
+	apiRoutes.GET("/tag/:id", server.getTag)
+	apiRoutes.GET("/tags", server.listTags)
+	authRoutes.DELETE("tag/:id", server.deleteTag)
 
 	// swagger
 	url := ginSwagger.URL("http://localhost:8080/swagger/doc.json")
