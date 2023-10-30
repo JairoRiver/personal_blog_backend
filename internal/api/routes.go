@@ -42,7 +42,7 @@ func (server *Server) setupRouter() {
 	authRoutes.GET("/users", server.listUsers)
 	authRoutes.PUT("/user/:id", server.updateUser)
 	authRoutes.DELETE("/user/:id", server.deleteUser)
-	apiRoutes.POST("login", server.loginUser)
+	apiRoutes.POST("/login", server.loginUser)
 
 	// Categories routes
 	authRoutes.POST("/category", server.createCategory)
@@ -55,7 +55,26 @@ func (server *Server) setupRouter() {
 	authRoutes.POST("/tag", server.createTag)
 	apiRoutes.GET("/tag/:id", server.getTag)
 	apiRoutes.GET("/tags", server.listTags)
-	authRoutes.DELETE("tag/:id", server.deleteTag)
+	authRoutes.DELETE("/tag/:id", server.deleteTag)
+
+	// Post routes admin
+	authRoutes.POST("/admin/post", server.createPost)
+	authRoutes.GET("/admin/post/:id", server.getPostByIdPrivate)
+	authRoutes.GET("/admin/category-post/:id", server.getPostByCategoryPrivate)
+	authRoutes.GET("/admin/tag-post/:id", server.getPostByTagPrivate)
+	authRoutes.GET("/admin/posts", server.listPostsPrivate)
+	authRoutes.PUT("/admin/post/{id}", server.updatePost)
+	authRoutes.DELETE("/admin/post/{id}", server.deletePost)
+
+	// Post routes public
+	apiRoutes.GET("/post/:id", server.getPostByIdPublic)
+	apiRoutes.GET("/category-post/:id", server.getPostByCategoryPublic)
+	apiRoutes.GET("tag-post/:id", server.getPostByTagPublic)
+	apiRoutes.GET("/posts", server.listPostsPublic)
+
+	// PostTag routes
+	authRoutes.POST("/admin/post-tag", server.createPostTag)
+	apiRoutes.DELETE("/admin/post-tag/:id", server.deletePostTag)
 
 	// swagger
 	url := ginSwagger.URL("http://localhost:8080/swagger/doc.json")

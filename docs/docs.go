@@ -15,6 +15,345 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/admin/category-post/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "Recive the one post on the admin panel by Category",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "post",
+                    "list"
+                ],
+                "summary": "Get a Post by Category Private",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.Post"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/post": {
+            "post": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "Create a new Post",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "post",
+                    "create"
+                ],
+                "summary": "Create a new Post",
+                "parameters": [
+                    {
+                        "description": "post Data",
+                        "name": "post",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_api.createPostRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.Post"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/post-tag": {
+            "post": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "Create a new PostTag",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "post_tag",
+                    "create"
+                ],
+                "summary": "Create a new PostTag",
+                "parameters": [
+                    {
+                        "description": "post_tag Data",
+                        "name": "post",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_api.createPostTag"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.PostsTag"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/post-tag/{id}": {
+            "delete": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "Delete one post_tag on the admin panel",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "post_tag",
+                    "delete"
+                ],
+                "summary": "Delete a PostTag by Id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.PostsTag"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/post/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "Recive the one post on the admin panel",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "post",
+                    "get"
+                ],
+                "summary": "Get a Post by Id Private",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.Post"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "Update a new Post",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "post",
+                    "update"
+                ],
+                "summary": "Update a Post",
+                "parameters": [
+                    {
+                        "description": "post Data",
+                        "name": "post",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_api.updatePostRequest"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.Post"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "Delete one post on the admin panel",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "post",
+                    "delete"
+                ],
+                "summary": "Delete a Post by Id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.Post"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/posts": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "Recive all posts on the admin panel",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "post",
+                    "list"
+                ],
+                "summary": "List all Posts Private",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.ListPostsPrivateRow"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/tag-post/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "Recive the one post on the admin panel by Tag",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "post",
+                    "list"
+                ],
+                "summary": "Get a Post by tag Private",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.Post"
+                        }
+                    }
+                }
+            }
+        },
         "/categories": {
             "get": {
                 "description": "Recive all categories",
@@ -33,7 +372,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/db.Category"
+                            "$ref": "#/definitions/github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.Category"
                         }
                     }
                 }
@@ -65,7 +404,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/api.createCategoryRequest"
+                            "$ref": "#/definitions/internal_api.createCategoryRequest"
                         }
                     }
                 ],
@@ -73,7 +412,40 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/db.Category"
+                            "$ref": "#/definitions/github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.Category"
+                        }
+                    }
+                }
+            }
+        },
+        "/category-post/{id}": {
+            "get": {
+                "description": "Recive the one post by Category",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "post",
+                    "list"
+                ],
+                "summary": "Get a Post by Category Public",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.Post"
                         }
                     }
                 }
@@ -106,7 +478,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/db.Category"
+                            "$ref": "#/definitions/github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.Category"
                         }
                     }
                 }
@@ -143,7 +515,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/api.updateCategoryRequestData"
+                            "$ref": "#/definitions/internal_api.updateCategoryRequestData"
                         }
                     }
                 ],
@@ -151,7 +523,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/db.Category"
+                            "$ref": "#/definitions/github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.Category"
                         }
                     }
                 }
@@ -214,7 +586,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/api.loginUserRequest"
+                            "$ref": "#/definitions/internal_api.loginUserRequest"
                         }
                     }
                 ],
@@ -222,7 +594,61 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.loginUserResponse"
+                            "$ref": "#/definitions/internal_api.loginUserResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/post/{id}": {
+            "get": {
+                "description": "Recive the one post public",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "post",
+                    "get"
+                ],
+                "summary": "Get a Post by Id Public",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.Post"
+                        }
+                    }
+                }
+            }
+        },
+        "/posts": {
+            "get": {
+                "description": "Recive all posts publics",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "post",
+                    "list"
+                ],
+                "summary": "List all Posts",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.ListPostsPublicRow"
                         }
                     }
                 }
@@ -267,7 +693,40 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/db.Tag"
+                            "$ref": "#/definitions/github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.Tag"
+                        }
+                    }
+                }
+            }
+        },
+        "/tag-post/{id}": {
+            "get": {
+                "description": "Recive the one post by Tag",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "post",
+                    "list"
+                ],
+                "summary": "Get a Post by tag Public",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.Post"
                         }
                     }
                 }
@@ -300,7 +759,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/db.Tag"
+                            "$ref": "#/definitions/github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.Tag"
                         }
                     }
                 }
@@ -360,7 +819,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/db.Tag"
+                            "$ref": "#/definitions/github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.Tag"
                         }
                     }
                 }
@@ -392,7 +851,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/api.createUserRequest"
+                            "$ref": "#/definitions/internal_api.createUserRequest"
                         }
                     }
                 ],
@@ -400,7 +859,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.userResponse"
+                            "$ref": "#/definitions/internal_api.userResponse"
                         }
                     }
                 }
@@ -438,7 +897,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/db.User"
+                            "$ref": "#/definitions/github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.User"
                         }
                     }
                 }
@@ -475,7 +934,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/api.updateUserRequestData"
+                            "$ref": "#/definitions/internal_api.updateUserRequestData"
                         }
                     }
                 ],
@@ -483,7 +942,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.userResponse"
+                            "$ref": "#/definitions/internal_api.userResponse"
                         }
                     }
                 }
@@ -548,7 +1007,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/db.ListUsersRow"
+                            "$ref": "#/definitions/github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.ListUsersRow"
                         }
                     }
                 }
@@ -556,7 +1015,181 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "api.createCategoryRequest": {
+        "github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.Category": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.ListPostsPrivateRow": {
+            "type": "object",
+            "properties": {
+                "category_id": {
+                    "type": "string"
+                },
+                "category_name": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "subtitle": {
+                    "type": "string"
+                },
+                "tags": {},
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.ListPostsPublicRow": {
+            "type": "object",
+            "properties": {
+                "category_id": {
+                    "type": "string"
+                },
+                "category_name": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "subtitle": {
+                    "type": "string"
+                },
+                "tags": {},
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.ListUsersRow": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.Post": {
+            "type": "object",
+            "properties": {
+                "category_id": {
+                    "type": "string"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "publicated": {
+                    "type": "boolean"
+                },
+                "subtitle": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.PostsTag": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "post_id": {
+                    "type": "string"
+                },
+                "tag_id": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.Tag": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "image_url": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.User": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_api.createCategoryRequest": {
             "type": "object",
             "required": [
                 "name"
@@ -567,7 +1200,48 @@ const docTemplate = `{
                 }
             }
         },
-        "api.createUserRequest": {
+        "internal_api.createPostRequest": {
+            "type": "object",
+            "required": [
+                "category_id",
+                "content",
+                "subtitle",
+                "title"
+            ],
+            "properties": {
+                "category_id": {
+                    "type": "string"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "publicated": {
+                    "type": "boolean"
+                },
+                "subtitle": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_api.createPostTag": {
+            "type": "object",
+            "required": [
+                "post_id",
+                "tag_id"
+            ],
+            "properties": {
+                "post_id": {
+                    "type": "string"
+                },
+                "tag_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_api.createUserRequest": {
             "type": "object",
             "required": [
                 "email",
@@ -586,7 +1260,7 @@ const docTemplate = `{
                 }
             }
         },
-        "api.loginUserRequest": {
+        "internal_api.loginUserRequest": {
             "type": "object",
             "required": [
                 "password",
@@ -602,7 +1276,7 @@ const docTemplate = `{
                 }
             }
         },
-        "api.loginUserResponse": {
+        "internal_api.loginUserResponse": {
             "type": "object",
             "properties": {
                 "access_token": {
@@ -628,7 +1302,7 @@ const docTemplate = `{
                 }
             }
         },
-        "api.updateCategoryRequestData": {
+        "internal_api.updateCategoryRequestData": {
             "type": "object",
             "properties": {
                 "name": {
@@ -636,7 +1310,27 @@ const docTemplate = `{
                 }
             }
         },
-        "api.updateUserRequestData": {
+        "internal_api.updatePostRequest": {
+            "type": "object",
+            "properties": {
+                "category_id": {
+                    "type": "string"
+                },
+                "content": {
+                    "$ref": "#/definitions/pgtype.Text"
+                },
+                "publicated": {
+                    "$ref": "#/definitions/pgtype.Bool"
+                },
+                "subtitle": {
+                    "$ref": "#/definitions/pgtype.Text"
+                },
+                "title": {
+                    "$ref": "#/definitions/pgtype.Text"
+                }
+            }
+        },
+        "internal_api.updateUserRequestData": {
             "type": "object",
             "properties": {
                 "email": {
@@ -650,7 +1344,7 @@ const docTemplate = `{
                 }
             }
         },
-        "api.userResponse": {
+        "internal_api.userResponse": {
             "type": "object",
             "properties": {
                 "createdAt": {
@@ -667,80 +1361,25 @@ const docTemplate = `{
                 }
             }
         },
-        "db.Category": {
+        "pgtype.Bool": {
             "type": "object",
             "properties": {
-                "created_at": {
-                    "type": "string"
+                "bool": {
+                    "type": "boolean"
                 },
-                "id": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "updated_at": {
-                    "type": "string"
+                "valid": {
+                    "type": "boolean"
                 }
             }
         },
-        "db.ListUsersRow": {
+        "pgtype.Text": {
             "type": "object",
             "properties": {
-                "created_at": {
+                "string": {
                     "type": "string"
                 },
-                "email": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "username": {
-                    "type": "string"
-                }
-            }
-        },
-        "db.Tag": {
-            "type": "object",
-            "properties": {
-                "created_at": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "image_url": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "updated_at": {
-                    "type": "string"
-                }
-            }
-        },
-        "db.User": {
-            "type": "object",
-            "properties": {
-                "created_at": {
-                    "type": "string"
-                },
-                "email": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "password": {
-                    "type": "string"
-                },
-                "updated_at": {
-                    "type": "string"
-                },
-                "username": {
-                    "type": "string"
+                "valid": {
+                    "type": "boolean"
                 }
             }
         }

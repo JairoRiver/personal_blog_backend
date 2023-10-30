@@ -1,12 +1,154 @@
 definitions:
-  api.createCategoryRequest:
+  github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.Category:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.ListPostsPrivateRow:
+    properties:
+      category_id:
+        type: string
+      category_name:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: string
+      subtitle:
+        type: string
+      tags: {}
+      title:
+        type: string
+    type: object
+  github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.ListPostsPublicRow:
+    properties:
+      category_id:
+        type: string
+      category_name:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: string
+      subtitle:
+        type: string
+      tags: {}
+      title:
+        type: string
+    type: object
+  github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.ListUsersRow:
+    properties:
+      created_at:
+        type: string
+      email:
+        type: string
+      id:
+        type: string
+      username:
+        type: string
+    type: object
+  github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.Post:
+    properties:
+      category_id:
+        type: string
+      content:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: string
+      publicated:
+        type: boolean
+      subtitle:
+        type: string
+      title:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.PostsTag:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: string
+      post_id:
+        type: string
+      tag_id:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.Tag:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: string
+      image_url:
+        type: string
+      name:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.User:
+    properties:
+      created_at:
+        type: string
+      email:
+        type: string
+      id:
+        type: string
+      password:
+        type: string
+      updated_at:
+        type: string
+      username:
+        type: string
+    type: object
+  internal_api.createCategoryRequest:
     properties:
       name:
         type: string
     required:
     - name
     type: object
-  api.createUserRequest:
+  internal_api.createPostRequest:
+    properties:
+      category_id:
+        type: string
+      content:
+        type: string
+      publicated:
+        type: boolean
+      subtitle:
+        type: string
+      title:
+        type: string
+    required:
+    - category_id
+    - content
+    - subtitle
+    - title
+    type: object
+  internal_api.createPostTag:
+    properties:
+      post_id:
+        type: string
+      tag_id:
+        type: string
+    required:
+    - post_id
+    - tag_id
+    type: object
+  internal_api.createUserRequest:
     properties:
       email:
         type: string
@@ -19,7 +161,7 @@ definitions:
     - password
     - username
     type: object
-  api.loginUserRequest:
+  internal_api.loginUserRequest:
     properties:
       password:
         minLength: 6
@@ -30,7 +172,7 @@ definitions:
     - password
     - username
     type: object
-  api.loginUserResponse:
+  internal_api.loginUserResponse:
     properties:
       access_token:
         type: string
@@ -47,12 +189,25 @@ definitions:
       user_id:
         type: string
     type: object
-  api.updateCategoryRequestData:
+  internal_api.updateCategoryRequestData:
     properties:
       name:
         type: string
     type: object
-  api.updateUserRequestData:
+  internal_api.updatePostRequest:
+    properties:
+      category_id:
+        type: string
+      content:
+        $ref: '#/definitions/pgtype.Text'
+      publicated:
+        $ref: '#/definitions/pgtype.Bool'
+      subtitle:
+        $ref: '#/definitions/pgtype.Text'
+      title:
+        $ref: '#/definitions/pgtype.Text'
+    type: object
+  internal_api.updateUserRequestData:
     properties:
       email:
         type: string
@@ -61,7 +216,7 @@ definitions:
       username:
         type: string
     type: object
-  api.userResponse:
+  internal_api.userResponse:
     properties:
       createdAt:
         type: string
@@ -72,59 +227,237 @@ definitions:
       username:
         type: string
     type: object
-  db.Category:
+  pgtype.Bool:
     properties:
-      created_at:
-        type: string
-      id:
-        type: string
-      name:
-        type: string
-      updated_at:
-        type: string
+      bool:
+        type: boolean
+      valid:
+        type: boolean
     type: object
-  db.ListUsersRow:
+  pgtype.Text:
     properties:
-      created_at:
+      string:
         type: string
-      email:
-        type: string
-      id:
-        type: string
-      username:
-        type: string
-    type: object
-  db.Tag:
-    properties:
-      created_at:
-        type: string
-      id:
-        type: string
-      image_url:
-        type: string
-      name:
-        type: string
-      updated_at:
-        type: string
-    type: object
-  db.User:
-    properties:
-      created_at:
-        type: string
-      email:
-        type: string
-      id:
-        type: string
-      password:
-        type: string
-      updated_at:
-        type: string
-      username:
-        type: string
+      valid:
+        type: boolean
     type: object
 info:
   contact: {}
 paths:
+  /admin/category-post/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Recive the one post on the admin panel by Category
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.Post'
+      security:
+      - JWT: []
+      summary: Get a Post by Category Private
+      tags:
+      - post
+      - list
+  /admin/post:
+    post:
+      consumes:
+      - application/json
+      description: Create a new Post
+      parameters:
+      - description: post Data
+        in: body
+        name: post
+        required: true
+        schema:
+          $ref: '#/definitions/internal_api.createPostRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.Post'
+      security:
+      - JWT: []
+      summary: Create a new Post
+      tags:
+      - post
+      - create
+  /admin/post-tag:
+    post:
+      consumes:
+      - application/json
+      description: Create a new PostTag
+      parameters:
+      - description: post_tag Data
+        in: body
+        name: post
+        required: true
+        schema:
+          $ref: '#/definitions/internal_api.createPostTag'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.PostsTag'
+      security:
+      - JWT: []
+      summary: Create a new PostTag
+      tags:
+      - post_tag
+      - create
+  /admin/post-tag/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete one post_tag on the admin panel
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.PostsTag'
+      security:
+      - JWT: []
+      summary: Delete a PostTag by Id
+      tags:
+      - post_tag
+      - delete
+  /admin/post/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete one post on the admin panel
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.Post'
+      security:
+      - JWT: []
+      summary: Delete a Post by Id
+      tags:
+      - post
+      - delete
+    get:
+      consumes:
+      - application/json
+      description: Recive the one post on the admin panel
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.Post'
+      security:
+      - JWT: []
+      summary: Get a Post by Id Private
+      tags:
+      - post
+      - get
+    put:
+      consumes:
+      - application/json
+      description: Update a new Post
+      parameters:
+      - description: post Data
+        in: body
+        name: post
+        required: true
+        schema:
+          $ref: '#/definitions/internal_api.updatePostRequest'
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.Post'
+      security:
+      - JWT: []
+      summary: Update a Post
+      tags:
+      - post
+      - update
+  /admin/posts:
+    get:
+      description: Recive all posts on the admin panel
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.ListPostsPrivateRow'
+      security:
+      - JWT: []
+      summary: List all Posts Private
+      tags:
+      - post
+      - list
+  /admin/tag-post/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Recive the one post on the admin panel by Tag
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.Post'
+      security:
+      - JWT: []
+      summary: Get a Post by tag Private
+      tags:
+      - post
+      - list
   /categories:
     get:
       consumes:
@@ -136,7 +469,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/db.Category'
+            $ref: '#/definitions/github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.Category'
       summary: List Categories
       tags:
       - category
@@ -152,20 +485,42 @@ paths:
         name: category
         required: true
         schema:
-          $ref: '#/definitions/api.createCategoryRequest'
+          $ref: '#/definitions/internal_api.createCategoryRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/db.Category'
+            $ref: '#/definitions/github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.Category'
       security:
       - JWT: []
       summary: Create a new Category
       tags:
       - category
       - create
+  /category-post/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Recive the one post by Category
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.Post'
+      summary: Get a Post by Category Public
+      tags:
+      - post
+      - list
   /category/{id}:
     delete:
       consumes:
@@ -206,7 +561,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/db.Category'
+            $ref: '#/definitions/github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.Category'
       summary: Get a Category
       tags:
       - category
@@ -226,14 +581,14 @@ paths:
         name: category
         required: true
         schema:
-          $ref: '#/definitions/api.updateCategoryRequestData'
+          $ref: '#/definitions/internal_api.updateCategoryRequestData'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/db.Category'
+            $ref: '#/definitions/github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.Category'
       security:
       - JWT: []
       summary: Update Category
@@ -251,18 +606,54 @@ paths:
         name: user
         required: true
         schema:
-          $ref: '#/definitions/api.loginUserRequest'
+          $ref: '#/definitions/internal_api.loginUserRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/api.loginUserResponse'
+            $ref: '#/definitions/internal_api.loginUserResponse'
       summary: Login User
       tags:
       - user
       - login
+  /post/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Recive the one post public
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.Post'
+      summary: Get a Post by Id Public
+      tags:
+      - post
+      - get
+  /posts:
+    get:
+      description: Recive all posts publics
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.ListPostsPublicRow'
+      summary: List all Posts
+      tags:
+      - post
+      - list
   /tag:
     post:
       consumes:
@@ -285,13 +676,35 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/db.Tag'
+            $ref: '#/definitions/github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.Tag'
       security:
       - JWT: []
       summary: Create a new Tag
       tags:
       - tag
       - create
+  /tag-post/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Recive the one post by Tag
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.Post'
+      summary: Get a Post by tag Public
+      tags:
+      - post
+      - list
   /tag/{id}:
     delete:
       consumes:
@@ -332,7 +745,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/db.Tag'
+            $ref: '#/definitions/github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.Tag'
       summary: Get a Tag
       tags:
       - tag
@@ -348,7 +761,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/db.Tag'
+            $ref: '#/definitions/github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.Tag'
       summary: List Tags
       tags:
       - tag
@@ -364,14 +777,14 @@ paths:
         name: user
         required: true
         schema:
-          $ref: '#/definitions/api.createUserRequest'
+          $ref: '#/definitions/internal_api.createUserRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/api.userResponse'
+            $ref: '#/definitions/internal_api.userResponse'
       security:
       - JWT: []
       summary: Create a new User
@@ -418,7 +831,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/db.User'
+            $ref: '#/definitions/github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.User'
       security:
       - JWT: []
       summary: Get a User
@@ -440,14 +853,14 @@ paths:
         name: user
         required: true
         schema:
-          $ref: '#/definitions/api.updateUserRequestData'
+          $ref: '#/definitions/internal_api.updateUserRequestData'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/api.userResponse'
+            $ref: '#/definitions/internal_api.userResponse'
       security:
       - JWT: []
       summary: Update User
@@ -465,7 +878,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/db.ListUsersRow'
+            $ref: '#/definitions/github_com_JairoRiver_personal_blog_backend_internal_db_sqlc.ListUsersRow'
       security:
       - JWT: []
       summary: List Users

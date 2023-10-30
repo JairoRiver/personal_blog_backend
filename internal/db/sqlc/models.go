@@ -23,7 +23,6 @@ type Post struct {
 	Title      string    `json:"title"`
 	Subtitle   string    `json:"subtitle"`
 	Content    string    `json:"content"`
-	ImageUrl   string    `json:"image_url"`
 	Publicated bool      `json:"publicated"`
 	CreatedAt  time.Time `json:"created_at"`
 	UpdatedAt  time.Time `json:"updated_at"`
@@ -33,7 +32,6 @@ type PostsTag struct {
 	ID        uuid.UUID `json:"id"`
 	PostID    uuid.UUID `json:"post_id"`
 	TagID     uuid.UUID `json:"tag_id"`
-	ImageUrl  string    `json:"image_url"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 }
